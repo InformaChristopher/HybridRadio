@@ -1,0 +1,347 @@
+:root {
+  --accent: #f08a3e;
+  --screen-bg: rgba(8, 18, 38, 0.0);
+  --text: #e8eef7;
+  --text-dim: #b6c0d2;
+
+  /* AABB da tela em PainelCarro.png (1700x1120) — detectado por análise
+     da imagem em scripts/detect-screen.js (transições escuro→prata da
+     moldura). */
+  --screen-top: 37.396%;
+  --screen-left: 36.166%;
+  --screen-width: 29.951%;
+  --screen-height: 38.514%;
+
+  /* Cantos do quadrilátero da tela em coordenadas relativas ao AABB
+     (0 = TL do AABB, 1 = BR do AABB). Refletem a perspectiva real da
+     foto (câmera ligeiramente acima e à esquerda). app.js lê estes
+     valores para montar matrix3d em runtime. */
+  --quad-tl-x: 0.00874;  --quad-tl-y: 0.05008;
+  --quad-tr-x: 0.93500;  --quad-tr-y: 0.00000;
+  --quad-br-x: 0.93500;  --quad-br-y: 1.06000;
+  --quad-bl-x: 0.00700;  --quad-bl-y: 0.95693;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background: #0a0d12;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body { padding: 24px; }
+
+.dashboard {
+  position: relative;
+  width: min(100%, 1200px);
+  aspect-ratio: 1700 / 1120;
+  background-image: url("img/PainelCarro.png");
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+}
+
+.screen {
+  position: absolute;
+  top: var(--screen-top);
+  left: var(--screen-left);
+  width: var(--screen-width);
+  height: var(--screen-height);
+  background: var(--screen-bg);
+  display: flex;
+  flex-direction: column;
+  padding: 1.4% 1.6%;
+  font-size: clamp(6px, 0.82vw, 11px);
+  overflow: hidden;
+  /* Recorte fino aos 4 cantos da tela física (relativos ao AABB). */
+  clip-path: polygon(
+    calc(var(--quad-tl-x) * 100%) calc(var(--quad-tl-y) * 100%),
+    calc(var(--quad-tr-x) * 100%) calc(var(--quad-tr-y) * 100%),
+    calc(var(--quad-br-x) * 100%) calc(var(--quad-br-y) * 100%),
+    calc(var(--quad-bl-x) * 100%) calc(var(--quad-bl-y) * 100%)
+  );
+  /* matrix3d com perspectiva é aplicado por app.js após medir o tamanho
+     renderizado (depende das dimensões reais do .dashboard). */
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1.4em;
+  font-size: 0.95em;
+  color: var(--text-dim);
+  letter-spacing: 0.01em;
+  margin-bottom: 3.0em;
+}
+
+.tab--active {
+  color: #fff;
+  font-weight: 600;
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35em;
+  margin-bottom: 0.9em;
+  height: 38%;
+  min-height: 0;
+}
+
+.cover {
+  flex: 0 0 auto;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 4px;
+  background: #2a2f3a center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.7em;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.3em;
+  opacity: 0.85;
+  transition: transform 0.25s ease;
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+
+.cover.playing {
+  height: 118%;
+  opacity: 1;
+  background-color: var(--accent);
+  box-shadow: 0 6px 18px rgba(240, 138, 62, 0.45);
+  border-color: rgba(255,255,255,0.18);
+  transform: translateY(-4%);
+}
+
+.station-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  font-size: 1em;
+  color: #fff;
+  margin-top: 0.2em;
+}
+
+.station-info .star { color: #fff; font-size: 0.95em; }
+.station-info .dot  { color: var(--text-dim); }
+
+.track-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  font-size: 0.85em;
+  color: var(--text-dim);
+  margin-top: 0.25em;
+  text-align: center;
+  flex-wrap: wrap;
+}
+
+.track-sep { opacity: 0.6; }
+
+.track-duration {
+  text-align: center;
+  font-size: 0.78em;
+  color: var(--text-dim);
+  margin-top: 0.2em;
+  font-variant-numeric: tabular-nums;
+}
+
+.search-bar {
+  margin: auto auto 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.35em 1.1em;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  font-size: 0.78em;
+  color: var(--text-dim);
+}
+
+@media (max-width: 700px) {
+  body { padding: 8px; }
+  .screen { font-size: clamp(5px, 1.2vw, 9px); }
+}
+
+/* ===== Botão de configuração + status do WS ===== */
+
+.settings-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 40px; height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(20, 28, 44, 0.8);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 50;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.settings-btn:hover { background: rgba(35, 48, 75, 0.95); transform: rotate(45deg); }
+
+.ws-status {
+  position: fixed;
+  top: 22px;
+  right: 64px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  z-index: 50;
+  user-select: none;
+}
+.ws-status--off       { background: #5a1f1f; color: #ffb3b3; }
+.ws-status--connecting { background: #5a4a1f; color: #ffe2a3; }
+.ws-status--on        { background: #1f5a3a; color: #b3ffd6; }
+
+/* ===== Modal de configuração ===== */
+
+.setup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 12, 22, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+}
+.setup-overlay[hidden] { display: none; }
+
+.setup-card {
+  width: min(560px, 100%);
+  background: #161c2a;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 24px 26px 22px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--text);
+  font-size: 14px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+}
+.setup-card h2 { font-size: 18px; font-weight: 600; margin-bottom: -4px; }
+.setup-hint   { font-size: 12.5px; color: var(--text-dim); line-height: 1.45; }
+
+.setup-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.setup-card input[type="text"] {
+  background: #0d1220;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 9px 11px;
+  font-size: 14px;
+  font-family: inherit;
+}
+.setup-card input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.setup-card input[type="file"] {
+  color: var(--text-dim);
+  font-size: 12px;
+  width: 100%;
+}
+
+.setup-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.setup-covers {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 12px 14px 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.setup-covers--primary {
+  grid-template-columns: minmax(0, 180px);
+  justify-content: start;
+}
+.setup-covers legend {
+  padding: 0 6px;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.setup-cover {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cover-preview {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #0d1220 center/cover no-repeat;
+  border: 1px dashed rgba(255,255,255,0.12);
+  border-radius: 6px;
+}
+
+.setup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+.btn {
+  border: 0;
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-ghost {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.btn-ghost:hover { color: var(--text); }
+
+.setup-error {
+  background: #5a1f1f;
+  color: #ffd0d0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+}

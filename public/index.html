@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hybrid Radio — Painel</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="dashboard">
+    <div class="screen">
+      <header class="tabs">
+        <span class="tab">Favorite</span>
+        <span class="tab tab--active">FM/DAB</span>
+        <span class="tab">TuneIn Radio</span>
+      </header>
+
+      <div class="carousel" id="carousel"></div>
+
+      <div class="station-info">
+        <span class="star">&#9733;</span>
+        <span id="station-name">—</span>
+        <span class="dot">|</span>
+        <span id="station-freq">—</span>
+      </div>
+
+      <div class="track-info">
+        <span id="track-title">—</span>
+        <span class="track-sep">/</span>
+        <span id="track-artist">—</span>
+      </div>
+
+      <div class="track-duration" id="track-duration">00:00</div>
+    </div>
+  </div>
+
+  <button id="settings-btn" class="settings-btn" title="Configurar conexão">&#9881;</button>
+  <div id="ws-status" class="ws-status ws-status--off" title="Status da conexão WebSocket">offline</div>
+
+  <div id="setup-overlay" class="setup-overlay" hidden>
+    <form id="setup-form" class="setup-card" autocomplete="off">
+      <h2>Hybrid Radio — Configuração</h2>
+      <p class="setup-hint">Informe a conexão WebSocket e os dados da estação. As imagens ficam guardadas no navegador (localStorage).</p>
+
+      <label>URL do WebSocket
+        <input id="cfg-url" name="wsUrl" type="text" placeholder="wss://servidor/path" required />
+      </label>
+      <label>Token de autenticação
+        <input id="cfg-token" name="wsToken" type="text" placeholder="token (opcional)" />
+      </label>
+
+      <div class="setup-row">
+        <label>Nome da estação
+          <input id="cfg-station-name" name="stationName" type="text" placeholder="SWR3 DAB" required />
+        </label>
+        <label>Frequência
+          <input id="cfg-station-freq" name="stationFreq" type="text" placeholder="208.1 MHz" required />
+        </label>
+      </div>
+
+      <fieldset class="setup-covers setup-covers--primary">
+        <legend>Imagem principal (default — usada quando o JSON não traz imageUrl)</legend>
+        <div class="setup-cover">
+          <input id="cfg-cover-primary" type="file" accept="image/*" />
+          <div id="cfg-cover-primary-preview" class="cover-preview"></div>
+        </div>
+      </fieldset>
+
+      <fieldset class="setup-covers">
+        <legend>Imagens secundárias do carousel</legend>
+        <div class="setup-cover">
+          <input id="cfg-cover-1" type="file" accept="image/*" />
+          <div id="cfg-cover-1-preview" class="cover-preview"></div>
+        </div>
+        <div class="setup-cover">
+          <input id="cfg-cover-2" type="file" accept="image/*" />
+          <div id="cfg-cover-2-preview" class="cover-preview"></div>
+        </div>
+        <div class="setup-cover">
+          <input id="cfg-cover-3" type="file" accept="image/*" />
+          <div id="cfg-cover-3-preview" class="cover-preview"></div>
+        </div>
+      </fieldset>
+
+      <div class="setup-actions">
+        <button type="button" id="setup-cancel" class="btn btn-ghost">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Conectar</button>
+      </div>
+      <p id="setup-error" class="setup-error" hidden></p>
+    </form>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

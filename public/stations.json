@@ -1,0 +1,60 @@
+{
+  "stations": [
+    {
+      "id": "sport",
+      "name": "Sport Radio",
+      "band": "DAB",
+      "frequency": "—",
+      "cover": "img/covers/sport.png",
+      "playing": false
+    },
+    {
+      "id": "swr-aktuell",
+      "name": "SWR Aktuell",
+      "band": "DAB",
+      "frequency": "—",
+      "cover": "img/covers/swr-aktuell.png",
+      "playing": false
+    },
+    {
+      "id": "swr2",
+      "name": "SWR2",
+      "band": "DAB",
+      "frequency": "—",
+      "cover": "img/covers/swr2.png",
+      "playing": false
+    },
+    {
+      "id": "swr3",
+      "name": "SWR3",
+      "band": "DAB",
+      "frequency": "208.1 MHz",
+      "cover": "img/covers/swr3.png",
+      "playing": true
+    },
+    {
+      "id": "swr4",
+      "name": "SWR4",
+      "band": "DAB",
+      "frequency": "—",
+      "cover": "img/covers/swr4.png",
+      "playing": false
+    },
+    {
+      "id": "dasding",
+      "name": "DASDING",
+      "band": "DAB",
+      "frequency": "—",
+      "cover": "img/covers/dasding.png",
+      "playing": false
+    },
+    {
+      "id": "toggo",
+      "name": "Toggo Radio",
+      "band": "DAB",
+      "frequency": "—",
+      "cover": "img/covers/toggo.png",
+      "playing": false
+    }
+  ]
+}
