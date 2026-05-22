@@ -258,15 +258,15 @@
     statusEl.textContent = text;
   }
 
-  // Conecta ao proxy local em /ws-proxy. O proxy abre o WS upstream usando
-  // `Authorization: Bearer <token>` (ou o esquema já presente no token),
-  // contornando a limitação do browser de não permitir headers em WS.
+  // Conecta direto no upstream. O backend aceita o token via querystring
+  // (`?token=...`), então não precisamos de proxy: a URL base vem do setup
+  // e o token é anexado aqui, preservando query params já existentes.
   function buildWsUrl() {
-    const proxy = new URL('/ws-proxy', window.location.href);
-    proxy.protocol = (window.location.protocol === 'https:') ? 'wss:' : 'ws:';
-    proxy.searchParams.set('target', config.wsUrl);
-    if (config.wsToken) proxy.searchParams.set('token', config.wsToken);
-    return proxy.toString();
+    const base = config.wsUrl;
+    const token = config.wsToken;
+    if (!token) return base;
+    const sep = base.includes('?') ? '&' : '?';
+    return `${base}${sep}token=${encodeURIComponent(token)}`;
   }
 
   function connectWS() {
