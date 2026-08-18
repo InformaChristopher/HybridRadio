@@ -1,10 +1,13 @@
 {
   "name": "hybrid-radio",
-  "version": "1.0.0",
-  "description": "Simulador interativo do painel multimidia Hybrid Radio",
+  "version": "2.0.0",
+  "description": "Painel Hybrid Radio com camada de resiliencia para conexoes lentas e instaveis",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "mock": "node scripts/mock-upstream.js",
+    "deploy:stage": "npx --yes @azure/static-web-apps-cli@2 deploy ./public --env stage",
+    "deploy:prod": "npx --yes @azure/static-web-apps-cli@2 deploy ./public --env production"
   },
   "dependencies": {
     "express": "^4.19.2",

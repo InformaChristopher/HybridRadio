@@ -214,6 +214,11 @@ body { padding: 24px; }
 .ws-status--off       { background: #5a1f1f; color: #ffb3b3; }
 .ws-status--connecting { background: #5a4a1f; color: #ffe2a3; }
 .ws-status--on        { background: #1f5a3a; color: #b3ffd6; }
+.ws-status--stale     { background: #5a3a1f; color: #ffd0a3; }
+.ws-status--poll      { background: #1f3f5a; color: #a9d8ff; }
+
+/* Dado muito antigo: sinaliza sem apagar o painel. */
+body[data-data-stale="1"] .track-info { opacity: 0.72; }
 
 /* ===== Modal de configuração ===== */
 
@@ -344,4 +349,20 @@ body { padding: 24px; }
   padding: 8px 12px;
   border-radius: 6px;
   font-size: 13px;
+}
+
+.setup-note {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.45;
+  font-weight: 400;
+  color: #8fa3c0;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.setup-note code {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1px 4px;
+  border-radius: 3px;
 }

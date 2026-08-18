@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/staticwebapp.config.json",
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/img/*", "/*.{css,js,json,png,jpg,jpeg,webp,svg,ico}"]
+  },
+  "routes": [
+    {
+      "route": "/index.html",
+      "headers": { "cache-control": "no-cache, must-revalidate" }
+    },
+    {
+      "route": "/app.js",
+      "headers": { "cache-control": "no-cache, must-revalidate" }
+    },
+    {
+      "route": "/styles.css",
+      "headers": { "cache-control": "no-cache, must-revalidate" }
+    },
+    {
+      "route": "/stations.json",
+      "headers": { "cache-control": "no-cache, must-revalidate" }
+    },
+    {
+      "route": "/img/*",
+      "headers": { "cache-control": "public, max-age=604800" }
+    }
+  ],
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer"
+  },
+  "mimeTypes": {
+    ".json": "application/json",
+    ".webp": "image/webp",
+    ".svg": "image/svg+xml"
+  }
+}

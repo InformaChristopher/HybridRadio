@@ -48,6 +48,10 @@
       <label>Token de autenticação
         <input id="cfg-token" name="wsToken" type="text" placeholder="token (opcional)" />
       </label>
+      <label>Servidor de apoio (opcional)
+        <input id="cfg-backend" name="backendUrl" type="text" placeholder="https://meu-proxy.azurewebsites.net — vazio = mesma origem" />
+        <small class="setup-note">Endereço do <code>server.js</code>. Ele reconecta sozinho, guarda o último estado, faz cache das capas e oferece fallback HTTP. Sem ele o painel fala direto com a API (o token precisa estar na própria URL).</small>
+      </label>
 
       <div class="setup-row">
         <label>Nome da estação
