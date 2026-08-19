@@ -81,6 +81,23 @@ pool.on('link', (link) => {
 });
 
 // ---- API -----------------------------------------------------------------
+// O painel pode estar hospedado em OUTRA origem (ex.: Static Web Apps) e
+// apontar para este servidor pelo campo "Servidor de apoio". Sem CORS o browser
+// bloquearia a deteccao (/api/health) e o fallback (/api/snapshot), e o painel
+// cairia em modo direto silenciosamente — o WebSocket ate funcionaria, mas o
+// replay, o cache de capas e o polling ficariam inacessiveis.
+app.use('/api', (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Vary', 'Origin');
+  if (req.method === 'OPTIONS') {
+    res.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.set('Access-Control-Max-Age', '86400');
+    res.status(204).end();
+    return;
+  }
+  next();
+});
+
 app.get('/api/img', (req, res) => { images.handle(req, res); });
 
 /**

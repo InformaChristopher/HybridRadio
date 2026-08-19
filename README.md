@@ -173,6 +173,16 @@ O mesmo `public/` roda em dois cenarios, detectados automaticamente no boot
 | Estado persistido no browser | sim | sim |
 | Backoff, watchdog, wake-up | sim | sim |
 
+Quando o "Servidor de apoio" aponta para OUTRA origem (painel no Static Web
+Apps, backend no App Service), valem duas exigencias:
+
+- **HTTPS obrigatorio** se o painel esta em HTTPS — pagina segura nao abre
+  `http://` nem `ws://` (mixed content). O painel converte sozinho
+  `https://` → `wss://` ao montar a URL do proxy.
+- **CORS**: as rotas `/api/*` ja respondem `Access-Control-Allow-Origin: *`.
+  Sem isso o browser bloquearia o `GET /api/health` da deteccao e o painel
+  cairia em modo direto sem avisar.
+
 No modo direto o token vai na querystring (`?token=...`), que e como a API
 aceita — query params ja existentes na URL sao preservados.
 
